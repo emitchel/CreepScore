@@ -36,9 +36,19 @@ function GameHelper() {
 
     this.StartNewGame = function() {
 		this.CloseShop();
+		
         this.MakeMinions();
+		this.ShowHealthBars();
         this.StartMinionAttacks();
     }
+	
+	this.ShowHealthBars = function(){
+		for (var i = 0; i < numOfMinions; i++) {
+			 me.MinionArray[i].elHP.show();
+			 me.MinionArray[i].elHP.width(60)
+        }
+	}
+	
 	this.OpenShop = function(){
 	
 	}
@@ -89,7 +99,7 @@ function GameHelper() {
 			game.OpenShop();
             bNewWave = true;
             bPlaying = false;
-			$(this).val("Next Level");
+			 $(".start").val("Next Wave");
 
         }
     }
@@ -134,7 +144,7 @@ function GameHelper() {
 
     this.MakeMinions = function() {
         me.MinionArray = [];
-
+		totalOtherMinions = 6;
         for (var i = 0; i < numOfMinions; i++) {
             var type = "melee";
             if (i <= 2) {
@@ -149,6 +159,9 @@ function GameHelper() {
             totalOtherMinions = totalOtherMinions - min.nFocused;
             me.MinionArray.push(min);
         }
+		if(totalOtherMinions > 0){
+			this.DistributeFocus(true,totalOtherMinions);
+		}
     }
 
     this.SetStateOfMinions = function(bEnabled) {
@@ -173,7 +186,7 @@ function ADC() {
     var me = this;
     this.AS = .625; //AAs per second
     this.sAS = 0; //Seconds per AA
-    this.AD = 5;
+    this.AD = 11;
     this.sPreCast = 0;
     this.sPostCast = 0;
 
@@ -185,43 +198,42 @@ function ADC() {
     this.elMinionsKilled = $("#minionsKilled");
     this.elAD = $("#ad");
     this.elAS = $("#as");
-
+	this.bCasting=false;
     this.SetUp = function() {
         this.SetCastTimes();
         this.UpdateStats();
     }
     this.SetCastTimes = function() {
-        me.sPreCast = me.sPostCast = ((1 / me.AS) / 2).toFixed(3);; //Seconds per AA;
+        me.sPreCast =((1 / me.AS)* (1/3)).toFixed(3)
+		me.sPostCast = ((1 / me.AS) *(2/3)).toFixed(3);; //Seconds per AA;
         me.sAS = (1 / me.AS).toFixed(3);
     }
 
     this.AACommand = function(minion) {
         //Start pre cast animation (bar goes to left)
         //(prevent clicks anywhere else)
-        this.AA.animate({width: "1px"}, this.getCastTimeInMillis(), function() {
-		if(minion.bAlive){
-            var newWidth = minion.elHP.width() - me.AD;
-            if (newWidth <= 0) {
-                me.KilledMinion(minion);
-            }
-            minion.AA_fromADC(me.AD);
+		if(minion.bAlive && !this.bCasting){
+		this.bCasting = true;
+			this.AA.animate({width: "1px"}, this.getPreCastTimeInMillis(), function() {
+				if(minion.bAlive){
+					var newWidth = minion.elHP.width() - me.AD;
+					if (newWidth <= 0) {
+						me.KilledMinion(minion);
+					}
+					minion.AA_fromADC(me.AD);
+				}
+			});
+
+			game.SetStateOfMinions(false);
+
+			this.AA.animate({
+				width: "500px"
+			}, this.getPostCastTimeInMillis(), function() {
+				game.SetStateOfMinions(true);
+				me.bCasting=false;
+			});
 		}
-            //Check if killed minion
-            //if killed, give money
-        });
-
-        game.SetStateOfMinions(false);
-
-        this.AA.animate({
-            width: "500px"
-        }, this.getCastTimeInMillis(), function() {
-            game.SetStateOfMinions(true);
-        });
-        //once pre cast animation over, take away HP
-        //Check if killed minion
-        //if killed, give money
-        //Start post cast animation
-        //(Now allow clicks anywhere else)
+        
     }
 
     this.KilledMinion = function(minion) {
@@ -240,8 +252,11 @@ function ADC() {
         me.elAS.html(me.AS);
     }
 
-    this.getCastTimeInMillis = function() {
+    this.getPreCastTimeInMillis = function() {
         return (me.sPreCast) * 1000; // seconds to milliseconds
+    }
+	this.getPostCastTimeInMillis = function() {
+        return (me.sPostCast) * 1000; // seconds to milliseconds
     }
 }
 
@@ -314,7 +329,7 @@ function Minion(i, type) {
             HPDrop(me.AD);
             MinionAATimeout = setTimeout(function() {
                 me.AA_fromOtherMinion(AAsFromOtherMinions - 1)
-            }, 200);
+            }, 300);
         }
         //}
     }
@@ -348,7 +363,7 @@ function Minion(i, type) {
     }
 
     this.Destroy = function() {
-        this.elHP.remove();
+        this.elHP.hide();
         this.wrapper.prop('disabled', true);
         //this.elSrc.remove();
     }
