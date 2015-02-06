@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Creep Score</title>
+  
+  <script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
+  <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <script type='text/javascript' src='js/creep.js'></script>
+  
+  <link rel="stylesheet" type="text/css" href="css/creep.css">
+  
+</head>
+<body>
+  <table id="minion_wave"  width=500px height=500px>
+  <colgroup>
+        <col style="width: 33%">
+        <col style="width: 33%">
+        <col style="width: 33%">
+     </colgroup>
+    <tr>
+        <td colspan="3">
+            <div id="aa">
+            </div>
+			
+        </td>
+    </tr>
+    <tr>   
+        <td>
+            <div id="0_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="0_focus" class="focus">
+					0
+				</div>
+            </div>
+			
+        </td>
+        <td>
+            <div id="1_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="1_focus" class="focus">
+					0
+				</div>
+            </div>
+        </td>
+        <td>
+           <div id="2_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="2_focus" class="focus">
+					0
+				</div>
+            </div>
+        </td>
+    </tr>
+        <tr>   
+        <td>
+            <div id="3_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="3_focus" class="focus">
+					0
+				</div>
+            </div>
+        </td>
+        <td>
+            <div id="4_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="4_focus" class="focus">
+					0
+				</div>
+            </div>
+        </td>
+        <td>
+           <div id="5_minion_wrapper" class="minion_wrapper">
+                <div id="hp"></div>
+                <img id="minion_src"></img>
+				<div id="5_focus" class="focus">
+					0
+				</div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+	<td>
+		<table class="smaller_table">
+			<tr>
+				<td class="right">
+					<span class="spec">Gold:</span>
+				</td>
+				<td class="left">
+					<span  id="gold" >0</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="right">
+					<span  class="spec">Minions:</span>
+				</td>
+				<td class="left">
+					<span id="minionsKilled">0</span>
+				</td>
+			</tr>
+		</table>
+        <td>
+            <div id="adc">
+            </div>
+        </td>
+	<td>
+		<table  class="smaller_table">
+			<tr>
+				<td class="right">
+					<span class="spec">AD:</span>
+				</td>
+				<td class="left">
+					<span  id="ad">0</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="right">
+					<span  class="spec">AS:</span>
+				</td>
+				<td class="left">
+					<span id="as">0</span>
+				</td>
+			</tr>
+		</table>
+		</td>
+    </tr>
+	<tr>
+		<td colspan=3>
+			<input type="button" class="start" value="Start"/>
+		</td>
+	</tr>
+</table>
+  
+</body>
+
+
+</html>
+

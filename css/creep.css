@@ -1,0 +1,60 @@
+body {
+	font-family:arial;
+}
+td {
+    text-align:center;
+    height:137px;
+}
+.left{
+	text-align:left;
+	height:50px;
+	width:50%;
+	}
+.right{
+	text-align:right;
+	height:50px;
+	width:50%;
+	}
+.smaller_table{
+	width:100%;
+}
+#minion_wave{
+	width:500px;
+	height:500px
+}
+#minion_src{
+    content:url("http://iconizer.net/files/Web_Design_Creatives/orig/Circle.png");
+    height:45px;
+    width:45px;
+}
+#adc{
+    width: 40px;
+    height:40px;
+    margin: 0 auto;
+    border:1px solid black;
+}
+#hp{
+    
+    background-color:green;
+    height:5px;
+    width:60px;
+}
+.minion_wrapper{
+    /*center  */
+    width: 60px;
+    margin: 0 auto;
+}
+.spec {
+	font-weight:bold;
+}
+#aa{
+    background-color:green;
+    height:60px;
+    width:500px;
+}
+
+.start {
+	width:500px;
+	height:137px;
+	font-size:75px;
+}
