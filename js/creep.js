@@ -213,11 +213,25 @@ function ADC() {
 		me.sPostCast = ((1 / me.AS) *(2/3)).toFixed(3);; //Seconds per AA;
         me.sAS = (1 / me.AS).toFixed(3);
     }
+	
+	this.AANoise = function(){
+		var audioElement = document.createElement('audio');
+        audioElement.setAttribute('src', 'sound/varus_aa.mp3');
+        audioElement.setAttribute('autoplay', 'autoplay');
+        //audioElement.load()
 
+        $.get();
+
+        audioElement.addEventListener("load", function() {
+            audioElement.play();
+        }, true);
+	}
+	
     this.AACommand = function(minion) {
         //Start pre cast animation (bar goes to left)
         //(prevent clicks anywhere else)
 		if(minion.bAlive && !this.bCasting){
+		this.AANoise();
 		this.bCasting = true;
 			this.AA.animate({width: "1px"}, this.getPreCastTimeInMillis(), function() {
 				if(minion.bAlive){
