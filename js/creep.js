@@ -50,7 +50,9 @@ function GameHelper() {
 	}
 	
 	this.OpenShop = function(){
-	
+		//FADEOUT MAIN AREA
+		//FADEIN SHOP
+		
 	}
 	
 	this.CloseShop = function(){
@@ -152,11 +154,14 @@ function GameHelper() {
             }
             var min = new Minion(i, type);
 			
+			min.SetUp()
+			
 			min.AD+=this.nLevel % 2;
 			
             min.nFocused = getRandomInt(0, totalOtherMinions);
 			
             totalOtherMinions = totalOtherMinions - min.nFocused;
+			
             me.MinionArray.push(min);
         }
 		if(totalOtherMinions > 0){
@@ -261,8 +266,10 @@ function ADC() {
 }
 
 function Minion(i, type) {
-    var me = this;
-
+    
+	var me = this;
+	var rangedPic = "art/caster.png";
+	var meleePic = "art/melee.png";
     this.Type = type; //ranged or melee
     this.id = i;
     this.bAlive = true;
@@ -284,6 +291,14 @@ function Minion(i, type) {
     var MinionAAInterval;
     var MinionAATimeout;
 
+	this.SetUp = function(){
+		if (me.Type == "ranged") {
+           me.elSrc.attr("src",rangedPic);
+        } else {
+           me.elSrc.attr("src",meleePic);
+        }
+	}
+	
     this.GetGold = function() {
         if (me.Type = "ranged") {
             return 30;
