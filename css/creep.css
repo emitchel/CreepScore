@@ -52,6 +52,13 @@ td {
     height:60px;
     width:500px;
 }
+#shop{
+	visibility:gone;
+}
+#dmg{
+	height:15px;
+	color:black;
+}
 
 .start {
 	width:500px;

@@ -4,6 +4,7 @@ var bNewWave = true;
 var bPlaying = false;
 $(function() {
     game = new GameHelper();
+	
     adc = new ADC();
     adc.SetUp();
 	
@@ -204,6 +205,8 @@ function ADC() {
     this.elAD = $("#ad");
     this.elAS = $("#as");
 	this.bCasting=false;
+	
+	this.items=[];
     this.SetUp = function() {
         this.SetCastTimes();
         this.UpdateStats();
@@ -224,7 +227,7 @@ function ADC() {
 
         audioElement.addEventListener("load", function() {
             audioElement.play();
-        }, true);
+        }, true); 
 	}
 	
     this.AACommand = function(minion) {
@@ -297,6 +300,8 @@ function Minion(i, type) {
     this.elHP = this.wrapper.find('#hp');
     this.elSrc = this.wrapper.find('#minion_src');
     this.elFocus = this.wrapper.find('.focus');
+	this.elDmg = this.wrapper.find('#dmg');
+	//hide the dmg right away
 
     this.wrapper.click(function() {
         adc.AACommand(me);
@@ -333,7 +338,7 @@ function Minion(i, type) {
             } else {
                 me.elHP.width(newWidth);
             }
-
+		
         } else {
             clearTimeout(MinionAAInterval);
             clearInterval(MinionAATimeout);
@@ -343,10 +348,16 @@ function Minion(i, type) {
     function AnimateMe() {
 		me.wrapper.effect("highlight", {}, 250);
     }
+	function ShowDmg(AD){
+		me.elDmg.html(AD);
+		me.elDmg.effect( "highlight", {}, 500, function(){
+			me.elDmg.html("");
+		} );
+	}
     this.AA_fromADC = function(AD) {
         AnimateMe();
+		ShowDmg(AD);
         HPDrop(AD);
-
     }
 
     this.AA_fromOtherMinion = function(AAsFromOtherMinions) {
