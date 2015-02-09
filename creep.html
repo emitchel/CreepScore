@@ -7,12 +7,12 @@
   <script type='text/javascript' src='http://code.jquery.com/jquery-2.1.0.js'></script>
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
   <script type='text/javascript' src='js/creep.js'></script>
-  
+  <script type='text/javascript' src='js/shop.js'></script>
   <link rel="stylesheet" type="text/css" href="css/creep.css">
   
 </head>
 <body>
-  <table id="minion_wave"  width=500px height=500px>
+  <table id="minion_wave" >
   <colgroup>
         <col style="width: 33%">
         <col style="width: 33%">
@@ -91,7 +91,7 @@
         </td>
     </tr>
     <tr>
-	<td>
+	<td colspan=1>
 		<table class="smaller_table">
 			<tr>
 				<td class="right">
@@ -110,14 +110,7 @@
 				</td>
 				
 			</tr>
-			
-		</table>
-        <td>
-            <div id="adc">
-            </div>
-        </td>
-	<td>
-		<table  class="smaller_table">
+
 			<tr>
 				<td class="right">
 					<span class="spec">AD:</span>
@@ -134,17 +127,135 @@
 					<span id="as">0</span>
 				</td>
 			</tr>
+			<tr>
+				<td class="right">
+					<span  class="spec">Crit:</span>
+				</td>
+				<td class="left">
+					<span id="crit">0</span>%
+				</td>
+			</tr>
 		</table>
+		</td>
+		<td class="right" colspan="2">
+			<table id="items">
+			<colgroup>
+				<col style="width: 16.66%">
+				<col style="width: 16.66%">
+				<col style="width: 16.66%">
+				<col style="width: 16.66%">
+				<col style="width: 16.66%">
+				<col style="width: 16.66%">
+			 </colgroup>
+				<tr>
+					<td class="item" id="item_1"></td>
+					<td class="item" id="item_2"></td>
+					<td class="item" id="item_3"></td>
+					<td class="item" id="item_4"></td>
+					<td class="item" id="item_5"></td>
+					<td class="item" id="item_6"></td>
+				</tr>
+						
+			</table>
 		</td>
     </tr>
 	<tr>
 		<td colspan=3>
 			<input type="button" class="start" value="Start"/>
+			<input type="button" class="btnShop" value="Shop" onclick="game.OpenShop();"/>
 		</td>
 	</tr>
 </table>
 <table id="shop">
-	
+	<colgroup>
+		<col style="width: 33.33%">
+		<col style="width: 33.33%">
+		<col style="width: 33.33%">
+	 </colgroup>
+	<tr>
+		<td>
+			<div id="shop_0" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_1" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_2" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="shop_3" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_4" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_5" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="shop_6" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_7" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+		<td>
+			<div id="shop_8" class="shop_item">
+				<img class="shop_img" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<div id="item_display">
+			<div class="left" style="padding-top:10px"><b>Gold:</b> $<span  id="gold" >0</span></div>
+				<table id="item_display_table">
+					<tr>
+						<td rowspan="2">
+							<div style="width:150px;height:150px;" >
+								<img id="item_display_img" class="shop_img"></img>
+							</div>
+						</td>
+						<td colspan="2">
+							<span id="item_display_title" ></span>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:150px" >
+							<span id="item_display_description"></span>
+						</td>
+						<td>
+							<input type="button" class="buybtn" onclick="shop.BuyItem();" id="item_display_button" value="Buy"/>
+							<input type="button" onclick="game.CloseShop();" id="item_display_button" value="Close"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>	
+	</tr>
+	<tr>
+		<td colspan="3" id="dependent_items">
+			
+		</td>
+	</tr>
 </table>
   
 </body>

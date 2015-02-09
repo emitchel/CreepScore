@@ -1,12 +1,20 @@
 var game;
 var adc;
+var shop;
+
 var bNewWave = true;
 var bPlaying = false;
 $(function() {
     game = new GameHelper();
+	shop = new Shop();
 	
-    adc = new ADC();
+	adc = new ADC();
     adc.SetUp();
+	
+	shop.SetUp();
+	shop.Remove();
+	
+   
 	
     $(".start").click(function() {
         if (bNewWave) {
@@ -32,11 +40,14 @@ function GameHelper() {
     var me = this;
     var numOfMinions = 6;
     var totalOtherMinions = 6;
+	
+	this.MinionWave = $("#minion_wave");
+	this.Shop = $("#shop");
 	this.nLevel=1;
     this.MinionArray;
 
     this.StartNewGame = function() {
-		this.CloseShop();
+		//this.CloseShop();
 		
         this.MakeMinions();
 		this.ShowHealthBars();
@@ -53,11 +64,22 @@ function GameHelper() {
 	this.OpenShop = function(){
 		//FADEOUT MAIN AREA
 		//FADEIN SHOP
+		me.MinionWave.fadeOut("slow",function(){
+			me.Shop.fadeIn("slow");
+		});
+		shop.SetADC(adc);
+		shop.SetGold();
+		
 		
 	}
 	
 	this.CloseShop = function(){
-	
+		me.Shop.fadeOut("slow",function(){
+			me.MinionWave.fadeIn("slow");
+		});
+		//me.Shop.animate({height: "0px"}, 500);
+		//me.MinionWave.animate({height: "500px"}, 500);
+		
 	}
 	
     this.DistributeFocus = function(bAppending, otherMinions) {
@@ -69,7 +91,7 @@ function GameHelper() {
             var minion = me.MinionArray[i];
 
             if (minion.bAlive) {
-                newFocus = getRandomInt(0, otherMinions);
+                newFocus = me.getRandomInt(0, otherMinions);
                 if (bAppending || minion.nFocused > 0) {
                     minion.nFocused += newFocus;
                 } else {
@@ -159,7 +181,7 @@ function GameHelper() {
 			
 			min.AD+=this.nLevel % 2;
 			
-            min.nFocused = getRandomInt(0, totalOtherMinions);
+            min.nFocused = me.getRandomInt(0, totalOtherMinions);
 			
             totalOtherMinions = totalOtherMinions - min.nFocused;
 			
@@ -179,7 +201,7 @@ function GameHelper() {
         }
     }
 
-    function getRandomInt(min, max) {
+    this.getRandomInt= function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 	
@@ -193,10 +215,11 @@ function ADC() {
     this.AS = .625; //AAs per second
     this.sAS = 0; //Seconds per AA
     this.AD = 11;
+	this.Crit=1;
     this.sPreCast = 0;
     this.sPostCast = 0;
 
-    this.gold = 0;
+    this.gold = 1000;
     this.minionsKilled = 0;
 
     this.AA = $('#aa');
@@ -204,9 +227,11 @@ function ADC() {
     this.elMinionsKilled = $("#minionsKilled");
     this.elAD = $("#ad");
     this.elAS = $("#as");
+	this.elCrit= $("#crit");
 	this.bCasting=false;
 	
 	this.items=[];
+	
     this.SetUp = function() {
         this.SetCastTimes();
         this.UpdateStats();
@@ -215,6 +240,7 @@ function ADC() {
         me.sPreCast =((1 / me.AS)* (1/3)).toFixed(3)
 		me.sPostCast = ((1 / me.AS) *(2/3)).toFixed(3);; //Seconds per AA;
         me.sAS = (1 / me.AS).toFixed(3);
+		
     }
 	
 	this.AANoise = function(){
@@ -229,20 +255,34 @@ function ADC() {
             audioElement.play();
         }, true); 
 	}
-	
+	this.GetCrit = function(){
+		var rng = game.getRandomInt(0,100);
+		if(rng<=me.Crit){
+			return me.AD;
+		} else {
+			return 0;
+		}
+	}
     this.AACommand = function(minion) {
         //Start pre cast animation (bar goes to left)
         //(prevent clicks anywhere else)
-		if(minion.bAlive && !this.bCasting){
+		if(minion.bAlive && !this.bCasting && bPlaying){
 		this.AANoise();
 		this.bCasting = true;
 			this.AA.animate({width: "1px"}, this.getPreCastTimeInMillis(), function() {
 				if(minion.bAlive){
-					var newWidth = minion.elHP.width() - me.AD;
+				var totalAD = me.AD + me.GetCrit();
+					var crittedOn = false;
+					if(totalAD> me.AD){
+						crittedOn = true;
+					}
+					
+					var newWidth = minion.elHP.width() - totalAD;
 					if (newWidth <= 0) {
 						me.KilledMinion(minion);
 					}
-					minion.AA_fromADC(me.AD);
+					
+					minion.AA_fromADC(totalAD, crittedOn);
 				}
 			});
 
@@ -272,6 +312,7 @@ function ADC() {
         me.elMinionsKilled.html(me.minionsKilled+"/"+String(game.nLevel*6));
         me.elAD.html(me.AD);
         me.elAS.html(me.AS);
+		me.elCrit.html(me.Crit);
     }
 
     this.getPreCastTimeInMillis = function() {
@@ -348,15 +389,23 @@ function Minion(i, type) {
     function AnimateMe() {
 		me.wrapper.effect("highlight", {}, 250);
     }
-	function ShowDmg(AD){
-		me.elDmg.html(AD);
-		me.elDmg.effect( "highlight", {}, 500, function(){
-			me.elDmg.html("");
-		} );
+	function ShowDmg(AD,wasCritted){
+		
+		if(!wasCritted){
+			me.elDmg.html(AD);
+			me.elDmg.fadeTo(100,1, function(){
+				me.elDmg.fadeTo(100,0);
+			});
+		} else {
+			me.elDmg.html("<span class='crithit'>"+AD+"!</span>");
+			me.elDmg.fadeTo(200,1, function(){
+				me.elDmg.fadeTo(200,0);
+			});
+		}		
 	}
-    this.AA_fromADC = function(AD) {
+    this.AA_fromADC = function(AD, wasCritted) {
         AnimateMe();
-		ShowDmg(AD);
+		ShowDmg(AD,wasCritted);
         HPDrop(AD);
     }
 
