@@ -220,7 +220,7 @@ function ADC() {
     this.sPreCast = 0;
     this.sPostCast = 0;
 
-    this.gold = 1000;
+    this.gold = 100;
     this.minionsKilled = 0;
 
     this.AA = $('#aa');
