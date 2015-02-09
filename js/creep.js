@@ -64,8 +64,8 @@ function GameHelper() {
 	this.OpenShop = function(){
 		//FADEOUT MAIN AREA
 		//FADEIN SHOP
-		me.MinionWave.fadeOut("slow",function(){
-			me.Shop.fadeIn("slow");
+		me.MinionWave.fadeOut(100,function(){
+			me.Shop.fadeIn(100);
 		});
 		shop.SetADC(adc);
 		shop.SetGold();
@@ -74,8 +74,8 @@ function GameHelper() {
 	}
 	
 	this.CloseShop = function(){
-		me.Shop.fadeOut("slow",function(){
-			me.MinionWave.fadeIn("slow");
+		me.Shop.fadeOut(100,function(){
+			me.MinionWave.fadeIn(100);
 		});
 		adc.FillItems();
 		//me.Shop.animate({height: "0px"}, 500);
@@ -220,7 +220,7 @@ function ADC() {
     this.sPreCast = 0;
     this.sPostCast = 0;
 
-    this.gold = 100;
+    this.gold = 100000;
     this.minionsKilled = 0;
 
     this.AA = $('#aa');
@@ -324,9 +324,19 @@ function ADC() {
 		me.Crit +=item.crit;
 		//special effects?!?!?
 		//call back function pertaining to each item.
+	}
+	
+	this.RemoveItem = function(item){
+		var index = me.items.indexOf(item);
+		if(index >-1){
+			me.items.splice(index,1);
+		}
 		
+		me.AD -=item.ad;
+		me.Crit -=item.Crit;
 		
 	}
+	
 	
 	this.FillItems = function(){
 		for(var i=0;i<6;i++){
