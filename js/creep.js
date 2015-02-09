@@ -77,6 +77,7 @@ function GameHelper() {
 		me.Shop.fadeOut("slow",function(){
 			me.MinionWave.fadeIn("slow");
 		});
+		adc.FillItems();
 		//me.Shop.animate({height: "0px"}, 500);
 		//me.MinionWave.animate({height: "500px"}, 500);
 		
@@ -314,7 +315,30 @@ function ADC() {
         me.elAS.html(me.AS);
 		me.elCrit.html(me.Crit);
     }
-
+	
+	this.AddItem = function(item) {
+		me.items.push(item);
+		me.AD += item.ad;
+		me.AS += ((me.AS *item.as)/100);
+		me.SetCastTimes();
+		me.Crit +=item.crit;
+		//special effects?!?!?
+		//call back function pertaining to each item.
+		
+		
+	}
+	
+	this.FillItems = function(){
+		for(var i=0;i<6;i++){
+			var lehItem = me.items[i];
+			if(lehItem !=null){
+				$("#item_"+i).html("<img style='width:100%;height:100%' src='"+lehItem.pic+"'/>");
+			} else {
+				$("#item_"+i).html("");
+			}	
+		}
+	}
+	
     this.getPreCastTimeInMillis = function() {
         return (me.sPreCast) * 1000; // seconds to milliseconds
     }

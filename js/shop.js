@@ -75,7 +75,7 @@ function Shop(){
 	}
 	
 	this.SetGold = function(){
-		$("#gold").html(me.adc.gold);
+		$("#shop_gold").html(adc.gold);
 	}
 	
 	this.MakeShop = function(){
@@ -176,7 +176,7 @@ function Shop(){
 				// $(".buybtn").attr("disabled", "disabled");
 			// }
 		//} else {
-			if(me.adc.gold>=item.cost){
+			if(adc.gold>=item.cost){
 				$(".buybtn").removeAttr("disabled");
 			} else {
 				$(".buybtn").attr("disabled", "disabled");
@@ -186,7 +186,7 @@ function Shop(){
 	}
 	
 	this.BuyItem = function(){
-		var gold = me.adc.Gold;
+		var gold = adc.gold;
 		var item = me.DisplayedItem;
 		if(!item.main){
 			//have to decrement any main items
@@ -203,8 +203,14 @@ function Shop(){
 			}
 		}
 		
-		
-		
+		//global adc
+		if(adc.gold>=item.cost){
+			adc.gold -= item.cost;
+			adc.AddItem(item);
+			adc.UpdateStats();
+			me.SetBuyBtnState(item);
+			this.SetGold();
+		}
 	}
 	
 }
