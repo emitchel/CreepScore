@@ -196,7 +196,7 @@ function Shop(){
 					for(var j=0;j<me.Items[i].children.length;j++){
 						if(me.Items[i].children[j].id==item.id){
 							me.Items[i].cost -= me.Items[i].children[j].cost;
-							break;
+							
 						}
 					}
 				}
@@ -204,7 +204,7 @@ function Shop(){
 		}
 		
 		//global adc
-		if(adc.gold>=item.cost){
+		if(adc.gold>=item.cost && adc.items.length<6){
 			adc.gold -= item.cost;
 			adc.AddItem(item);
 			adc.UpdateStats();
